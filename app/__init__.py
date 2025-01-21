@@ -5,7 +5,8 @@ def create_app():
     app = Flask(__name__)
     
     # 配置数据库URI
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///your-database.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost:5432/sightstack_dev'
+
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # 初始化数据库
