@@ -1,0 +1,27 @@
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from ..db import db
+from typing import TYPE_CHECKING
+
+class User(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    username: Mapped[str]
+    password_hash: Mapped[str]
+    avatar: Mapped[str]
+
+    achievements: Mapped[list['UserAchievements']] = relationship('UserAchievements', back_populates='user')
+    progress: Mapped[list['UserProgress']] = relationship('UserProgress', back_populates='user')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'password_hash': self.password_hash,
+            'avatar': self.avatar
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        return User(username=data['username'], 
+                    password_hash=data['password_hash'], 
+                    avatar=data.get('avatar')
+        )
