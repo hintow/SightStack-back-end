@@ -12,7 +12,7 @@ class UserProgress(db.Model):
     attempts: Mapped[int]
 
     user: Mapped['User'] = relationship('User', back_populates='progress')
-    puzzle: Mapped['Puzzle'] = relationship('Puzzle', back_populates='progress')
+    puzzle: Mapped['Word'] = relationship('Puzzle', back_populates='progress')
 
     def to_dict(self):
         return {
