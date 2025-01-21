@@ -5,8 +5,7 @@ from typing import TYPE_CHECKING
 class Word(db.Model):
     __tablename__ = 'sight_words'
 
-
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    word_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     word: Mapped[str] 
     definition: Mapped[str] 
     grade: Mapped[str]
@@ -15,7 +14,7 @@ class Word(db.Model):
 
     def to_dict(self):
         return {
-            'id': self.id,
+            'word_id': self.id,
             'word': self.word,
             'definition': self.definition,
             'grade': self.grade

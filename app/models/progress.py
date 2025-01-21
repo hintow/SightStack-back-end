@@ -4,21 +4,21 @@ from ..db import db
 from typing import TYPE_CHECKING
 
 class UserProgress(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    userprogress_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'))
-    puzzle_id: Mapped[int] = mapped_column(db.ForeignKey('puzzle.id'))
+    word_id: Mapped[int] = mapped_column(db.ForeignKey('word.id'))
     score: Mapped[int]
     completion_time: Mapped[int]
     attempts: Mapped[int]
 
     user: Mapped['User'] = relationship('User', back_populates='progress')
-    puzzle: Mapped['Word'] = relationship('Puzzle', back_populates='progress')
+    word: Mapped['Word'] = relationship('Word', back_populates='progress')
 
     def to_dict(self):
         return {
-            'id': self.id,
+            'userprogress_id': self.id,
             'user_id': self.user_id,
-            'puzzle_id': self.puzzle_id,
+            'word_id': self.word_id,
             'score': self.score,
             'completion_time': self.completion_time,
             'attempts': self.attempts
@@ -27,7 +27,7 @@ class UserProgress(db.Model):
     @classmethod
     def from_dict(cls, data):
         return UserProgress(user_id=data['user_id'], 
-                            puzzle_id=data['puzzle_id'],
+                            word_id=data['word_id'],
                             score=data['score'], 
                             completion_time=data['completion_time'], 
                             attempts=data['attempts']

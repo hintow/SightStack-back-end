@@ -3,7 +3,7 @@ from ..db import db
 from typing import TYPE_CHECKING
 
 class User(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str]
     password_hash: Mapped[str]
     avatar: Mapped[str]
@@ -13,7 +13,7 @@ class User(db.Model):
 
     def to_dict(self):
         return {
-            'id': self.id,
+            'user_id': self.id,
             'username': self.username,
             'password_hash': self.password_hash,
             'avatar': self.avatar
