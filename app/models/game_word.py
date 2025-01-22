@@ -1,11 +1,15 @@
 from app import db
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey
+from .word import Word
+from .game import Game
 
-class GameWords(db.Model):
-    __tablename__ = 'game_words'
+class GameWord(db.Model):
+    __tablename__ = 'game_word'
 
-    game_id = db.Column(db.Integer, db.ForeignKey('games.id'), primary_key=True)
-    word_id = db.Column(db.Integer, db.ForeignKey('words.id'), primary_key=True)
+    game_id: Mapped[int] = mapped_column(ForeignKey(games.id), primary_key=True)
+    word_id: Mapped[int] = mapped_column(ForeignKey(words.id), primary_key=True)
 
-    # Relationships (optional, for easier navigation)
-    game = db.relationship('Game', back_populates='game_words')
-    word = db.relationship('Word', back_populates='game_words')
+    # Relationships 
+    games: Mapped[list["Word"]] = relationship(secondary="game_word", back_populates="words")
+    words: Mapped[list["Game"]] = relationship(secondary="game_word", back_populates="games")

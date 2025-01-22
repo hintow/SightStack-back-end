@@ -27,8 +27,7 @@ class Game(db.Model):
 
     @classmethod
     def from_dict(cls, data):
-        return Game(user_id=data['id'], 
-                    word_id=data['word_id'],
+        return Game(user_id=data['user_id'], 
                     score=data['score'],
                     level=data['level']
         )

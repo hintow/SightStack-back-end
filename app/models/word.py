@@ -2,27 +2,25 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
 from .game import Game
+from .game_word import GameWord
+
 
 class Word(db.Model):
-    __tablename__ = 'sight_words'
+    __tablename__ = 'words'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     word: Mapped[str] 
-    definition: Mapped[str] 
+    hint: Mapped[str] 
     level: Mapped[str]
 
-
     # Relationship to GameWords
-    game_words = db.relationship('GameWords', back_populates='word')
-
-    # Optional: Access games directly via the relationship
-    games = db.relationship('Game', secondary='games_words', back_populates='words')
+    game_words: Mapped[list['GameWord']] = relationship('GameWord', back_populates='word')
 
     def to_dict(self):
         return {
             'word_id': self.id,
             'word': self.word,
-            'definition': self.definition,
+            'hint': self.hint,
             'level': self.level
         }
 
@@ -30,6 +28,6 @@ class Word(db.Model):
     def from_dict(cls, data):
         return Word(
             word=data['word'],
-            definition=data['definition'],
+            hint=data['hint'],
             level=data['level']
         )
