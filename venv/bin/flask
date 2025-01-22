@@ -1,4 +1,4 @@
-#!/Users/weiqiang/Developer/capstone/SightStack-back-end/venv/bin/python3
+#!/Users/ivy/ada/ada_projects/capstone/SightStack-back-end/venv/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys

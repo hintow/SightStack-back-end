@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
+from .user_achievements import UserAchievements
+from .progress import UserProgress  
 
 class User(db.Model):
     user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)

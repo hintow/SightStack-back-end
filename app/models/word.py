@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
+from .progress import UserProgress
 
 class Word(db.Model):
     __tablename__ = 'sight_words'
