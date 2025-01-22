@@ -14,25 +14,19 @@ def create_user():
     user = User.from_dict(data)
     db.session.add(user)
     db.session.commit()
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict()), 201
 
 @user_routes.route('/users/<int:user_id>', methods=['GET']) 
 def get_user(user_id):
     user = User.query.get(user_id)
-    return jsonify(user.to_dict())
+    if user:
+        return jsonify(user.to_dict()), 200
+    else:
+        return jsonify({'error': 'User not found'}), 404
 
 @user_routes.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
-    return jsonify([user.to_dict() for user in users])
+    return jsonify([user.to_dict() for user in users]), 200
 
-@user_routes.route('/users/<int:user_id>', methods=['PUT'])
-def update_user(user_id):
-    user = User.query.get(user_id)
-    data = request.json
-    user.username = data['username']
-    user.password_hash = data['password_hash']
-    user.avatar = data['avatar']
-    db.session.commit()
-    return jsonify(user.to_dict())
 
