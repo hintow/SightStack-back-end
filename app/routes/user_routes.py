@@ -1,6 +1,6 @@
 # user log in 
 # post - create a new user
-# get - get one user
+# get - get one user/ get all users
 
 from flask import Blueprint, request, jsonify
 from ..models.user import User

@@ -1,6 +1,8 @@
 from flask import Flask
 from .db import db, migrate
 from .models.user import user_bp  
+from .routes.word_routes import word_routes
+from .routes.progress_routes import progress_bp
 
 def create_app():
     app = Flask(__name__)
@@ -13,5 +15,7 @@ def create_app():
     migrate.init_app(app, db)
     
     app.register_blueprint(user_bp, url_prefix='/api')
+    app.register_blueprint(word_routes, url_prefix='/api')  
+    app.register_blueprint(progress_bp, url_prefix='/api')  
     
     return app
