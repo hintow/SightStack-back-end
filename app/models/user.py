@@ -2,16 +2,18 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
 from .user_achievements import UserAchievements
-from .progress import UserProgress  
+from .game import Game
 
 class User(db.Model):
-    user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    __tablename__ = 'users'
+      
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str]
     password_hash: Mapped[str]
     avatar: Mapped[str]
 
     achievements: Mapped[list['UserAchievements']] = relationship('UserAchievements', back_populates='user')
-    progress: Mapped[list['UserProgress']] = relationship('UserProgress', back_populates='user')
+    games: Mapped[list['Game']] = relationship('Game', back_populates='user')
 
     def to_dict(self):
         return {
