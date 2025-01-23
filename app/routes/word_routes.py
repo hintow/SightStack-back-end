@@ -8,7 +8,7 @@ from ..db import db
 
 word_routes = Blueprint('word_routes', __name__)
 
-NUM_WORDS_DAILY_CHALLENGE = 10
+NUM_WORDS_DAILY_CHALLENGE = 3
 NUM_WORDS_GET_WORDS = 5
 
 @word_routes.route('/daily_challenge', methods=['GET'])

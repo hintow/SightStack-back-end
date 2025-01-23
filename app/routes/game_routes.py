@@ -35,3 +35,16 @@ def get_game_words(game_id):
 
     words = game.words
     return jsonify([word.to_dict() for word in words]), 200
+
+# Update game info
+@game_bp.route('/games/<int:game_id>', methods=['PUT'])
+def update_game(game_id):
+    game = Game.query.get(game_id)
+    if not game:
+        return jsonify({'error': 'Game not found'}), 404
+
+    data = request.get_json()
+    game.score = data.get('score', game.score)
+    game.level = data.get('level', game.level)
+    db.session.commit()
+    return jsonify(game.to_dict()), 200
