@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 class UserAchievements(db.Model):
     __tablename__ = 'user_achievements'
 
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
-    achievement_id: Mapped[int] = mapped_column(ForeignKey('achievement.id'), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
+    achievement_id: Mapped[int] = mapped_column(ForeignKey('achievements.id'), primary_key=True)
 
     user: Mapped['User'] = relationship('User', back_populates='achievements')
     achievement: Mapped['Achievement'] = relationship('Achievement', back_populates='user_achievements')

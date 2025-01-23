@@ -11,7 +11,7 @@ class Game(db.Model):
     __tablename__ = 'games'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'))
+    user_id: Mapped[int] = mapped_column(db.ForeignKey('users.id'))
     score: Mapped[int]
     level: Mapped[str]
 
