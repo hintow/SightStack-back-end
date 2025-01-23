@@ -2,7 +2,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
 from .game import Game
-from .game_word import GameWord
+
+if TYPE_CHECKING:
+    from .game_word import GameWord
 
 
 class Word(db.Model):
