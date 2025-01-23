@@ -2,8 +2,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
 from ..db import db
 from typing import TYPE_CHECKING
-from .user import User
 from .word import Word
+
+if TYPE_CHECKING:
+    from .user import User
 
 class Game(db.Model):
     __tablename__ = 'games'

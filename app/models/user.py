@@ -2,7 +2,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
 from .user_achievements import UserAchievements
-from .game import Game
+if TYPE_CHECKING:
+    from .game import Game
+
 
 class User(db.Model):
     __tablename__ = 'users'

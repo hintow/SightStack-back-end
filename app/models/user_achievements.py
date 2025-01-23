@@ -2,9 +2,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey, DateTime
 from ..db import db
 from typing import TYPE_CHECKING
-from .user import User
-from .achievement import Achievement
 from datetime import datetime
+
+if TYPE_CHECKING:
+    from .user import User
+    from .achievement import Achievement
 
 class UserAchievements(db.Model):
     __tablename__ = 'user_achievements'
