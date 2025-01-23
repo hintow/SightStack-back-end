@@ -14,7 +14,7 @@ class Word(db.Model):
     level: Mapped[str]
 
     # Relationship to GameWords
-    game_words: Mapped[list['GameWord']] = relationship('GameWord', back_populates='word')
+    game_words: Mapped[list['GameWord']] = relationship('GameWord', back_populates='words')
 
     def to_dict(self):
         return {
