@@ -10,8 +10,8 @@ if TYPE_CHECKING:
 class GameWord(db.Model):
     __tablename__ = 'games_words'
 
-    game_id: Mapped[int] = mapped_column(ForeignKey("game.id"), primary_key=True)
-    word_id: Mapped[int] = mapped_column(ForeignKey("word.id"), primary_key=True)
+    game_id: Mapped[int] = mapped_column(ForeignKey("games.id"), primary_key=True)
+    word_id: Mapped[int] = mapped_column(ForeignKey("words.id"), primary_key=True)
 
     # Relationships 
     games: Mapped[list["Word"]] = relationship(secondary="games_words", back_populates="words")
