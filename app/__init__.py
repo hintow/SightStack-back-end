@@ -10,6 +10,7 @@ from .models.game import Game
 from .models.word import Word
 from .models.user_achievements import UserAchievements
 from .models.game_word import GameWord
+from .models.achievement import Achievement
 
 load_dotenv() 
 
