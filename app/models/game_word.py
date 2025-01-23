@@ -1,11 +1,11 @@
 from app import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
-from .game import Game
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .word import Word
+    from .game import Game
 
 class GameWord(db.Model):
     __tablename__ = 'games_words'
