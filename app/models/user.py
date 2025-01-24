@@ -14,8 +14,8 @@ class User(db.Model):
     password_hash: Mapped[str]
     avatar: Mapped[str]
 
-    achievements: Mapped[list['UserAchievements']] = relationship('UserAchievements', back_populates='users')
-    games: Mapped[list['Game']] = relationship('Game', back_populates='users')
+    achievements: Mapped[list['UserAchievements']] = relationship('UserAchievements', back_populates='user')
+    games: Mapped[list['Game']] = relationship('Game', back_populates='user')
 
     def to_dict(self):
         return {

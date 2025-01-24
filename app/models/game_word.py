@@ -14,5 +14,5 @@ class GameWord(db.Model):
     word_id: Mapped[int] = mapped_column(ForeignKey("words.id"), primary_key=True)
 
     # Relationships 
-    games: Mapped[list["Word"]] = relationship(secondary="games_words", back_populates="words")
-    words: Mapped[list["Game"]] = relationship(secondary="games_words", back_populates="games")
+    game: Mapped["Game"]= relationship("Game", back_populates="game_words")
+    word: Mapped["Word"] = relationship("Word", back_populates="game_words")

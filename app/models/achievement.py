@@ -10,7 +10,7 @@ class Achievement(db.Model):
     title: Mapped[str]
     description: Mapped[str]
 
-    user_achievements: Mapped[list['UserAchievements']] = relationship('UserAchievements', back_populates='achievements')
+    user_achievements: Mapped[list['UserAchievements']] = relationship('UserAchievements', back_populates='achievement')
 
     def to_dict(self):
         return {

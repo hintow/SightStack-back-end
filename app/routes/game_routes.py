@@ -1,21 +1,49 @@
-# define game-related routes. These routes can handle operations such as 
-# creating a game, getting game information, updating a game
 
 from flask import Blueprint, request, jsonify
 from ..models.game import Game
 from ..models.word import Word
+from ..models.game_word import GameWord
 from ..db import db
+from ..models.user import User
+import random
 
 game_bp = Blueprint('game', __name__)
 
-# Create a game
-@game_bp.route('/games', methods=['POST'])
-def create_game():
+# Start a new game
+@game_bp.route('/games/start', methods=['POST'])
+def start_game():
     data = request.get_json()
-    new_game = Game.from_dict(data)
+    user_id = data.get('user_id')
+    level = data.get('level')
+
+     # Check if user exists
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Create a new game record
+    new_game = Game(user_id=user_id, score=0, level=level)
     db.session.add(new_game)
     db.session.commit()
-    return jsonify(new_game.to_dict()), 201
+
+    # Draw five random words from the words table
+    words = Word.query.filter_by(level=level).all()
+    selected_words = random.sample(words, 5)
+
+    # Update the game_word table
+    for word in selected_words:
+        game_word = GameWord(game_id=new_game.id, word_id=word.id)
+        db.session.add(game_word)
+
+    db.session.commit()
+
+    # Prepare the response
+    response = {
+        'game_id': new_game.id,
+        'words': [{'word': word.word, 'hint': word.hint} for word in selected_words]
+    }
+
+    return jsonify(response), 201
 
 # Get game info
 @game_bp.route('/games/<int:game_id>', methods=['GET'])
@@ -45,6 +73,6 @@ def update_game(game_id):
 
     data = request.get_json()
     game.score = data.get('score', game.score)
-    game.level = data.get('level', game.level)
     db.session.commit()
     return jsonify(game.to_dict()), 200
+

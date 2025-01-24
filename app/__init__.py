@@ -11,6 +11,7 @@ from .models.word import Word
 from .models.user_achievements import UserAchievements
 from .models.game_word import GameWord
 from .models.achievement import Achievement
+from .routes.game_routes import game_bp
 
 load_dotenv() 
 
@@ -26,8 +27,14 @@ def create_app(config=None):
 
     db.init_app(app)    
     migrate.init_app(app, db)
+
+    app.register_blueprint(game_bp)
     
     # app.register_blueprint(user_bp, url_prefix='/api')
     # app.register_blueprint(word_routes, url_prefix='/api')  
     
     return app
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True)

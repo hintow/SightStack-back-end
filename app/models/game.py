@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from .user import User
     from .word import Word
+    from .game_word import GameWord
 
 class Game(db.Model):
     __tablename__ = 'games'
@@ -17,7 +18,8 @@ class Game(db.Model):
 
 
     user: Mapped['User'] = relationship('User', back_populates='games')
-    words: Mapped[list["Word"]] = relationship(secondary="game_word", back_populates="games")
+    game_words: Mapped[list['GameWord']] = relationship("GameWord", back_populates="game")
+    words: Mapped[list["Word"]] = relationship(secondary="games_words", back_populates="games")
     
     def to_dict(self):
         return {
