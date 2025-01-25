@@ -16,10 +16,15 @@ class Game(db.Model):
     score: Mapped[int]
     level: Mapped[str]
 
-
+     # Many-to-one relationship with User
     user: Mapped['User'] = relationship('User', back_populates='games')
-    game_words: Mapped[list['GameWord']] = relationship("GameWord", back_populates="game")
-    words: Mapped[list["Word"]] = relationship(secondary="games_words", back_populates="games")
+
+    # One-to-many relationship with GameWord
+    game_words: Mapped[list['GameWord']] = relationship('GameWord', back_populates='game')
+
+    # Many-to-many relationship with Word through GameWord
+    words: Mapped[list['Word']] = relationship(secondary='games_words', back_populates='games')
+
     
     def to_dict(self):
         return {

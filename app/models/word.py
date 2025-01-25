@@ -15,8 +15,10 @@ class Word(db.Model):
     hint: Mapped[str] 
     level: Mapped[str]
 
-    # Relationship to GameWords
+    # One-to-many relationship with GameWord
     game_words: Mapped[list['GameWord']] = relationship('GameWord', back_populates='word')
+
+    # Many-to-many relationship with Game through GameWord
     games: Mapped[list['Game']] = relationship(secondary='games_words', back_populates='words')
 
     def to_dict(self):

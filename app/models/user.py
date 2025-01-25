@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
-from .user_achievements import UserAchievements
-if TYPE_CHECKING:
-    from .game import Game
 
+if TYPE_CHECKING:
+    from .achievement import Achievement
+    from .user_achievements import UserAchievements
+    from .game import Game
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -14,8 +15,18 @@ class User(db.Model):
     password_hash: Mapped[str]
     avatar: Mapped[str]
 
-    achievements: Mapped[list['UserAchievements']] = relationship('UserAchievements', back_populates='user')
+    # achievements: Mapped[list['UserAchievements']] = relationship(secondary='user_achievements', back_populates='user')
+    # games: Mapped[list['Game']] = relationship('Game', back_populates='user')
+
+    # Many-to-many relationship with Achievement through UserAchievements
+    achievements: Mapped[list['Achievement']] = relationship(
+        secondary='user_achievements',
+        back_populates='users'
+    )
+
+    # One-to-many relationship with Game
     games: Mapped[list['Game']] = relationship('Game', back_populates='user')
+
 
     def to_dict(self):
         return {
