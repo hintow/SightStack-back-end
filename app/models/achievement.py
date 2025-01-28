@@ -6,15 +6,13 @@ if TYPE_CHECKING:
     from .user import User
     from .user_achievements import UserAchievements
 
-
-
-
 class Achievement(db.Model):
     __tablename__ = 'achievements'
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str]
     description: Mapped[str]
+    unlocked: Mapped[bool] = mapped_column(default=False)
 
     # user_achievements: Mapped[list['UserAchievements']] = relationship('UserAchievements', back_populates='achievement')
     
