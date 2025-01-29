@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .achievement import Achievement
-    from .user_achievements import UserAchievements
+    from .user_achievement import UserAchievement
     from .game import Game
 
 class User(db.Model):
@@ -13,7 +13,7 @@ class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str]
     password_hash: Mapped[str]
-    avatar: Mapped[str]
+    avatar: Mapped[str]=mapped_column(nullable=True)
 
     # achievements: Mapped[list['UserAchievements']] = relationship(secondary='user_achievements', back_populates='user')
     # games: Mapped[list['Game']] = relationship('Game', back_populates='user')
@@ -23,6 +23,10 @@ class User(db.Model):
         secondary='user_achievements',
         back_populates='users'
     )
+
+    # One-to-many relationship with UserAchievement
+    user_achievements: Mapped[list['UserAchievement']] = relationship('UserAchievement', back_populates='user')
+
 
     # One-to-many relationship with Game
     games: Mapped[list['Game']] = relationship('Game', back_populates='user')

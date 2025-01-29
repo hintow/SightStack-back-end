@@ -6,9 +6,9 @@ from flask import Blueprint, request, jsonify
 from ..models.user import User
 from ..db import db
 
-user_routes = Blueprint('user_routes', __name__)
+user_bp = Blueprint('user_bp', __name__)
 
-@user_routes.route('/users', methods=['POST'])  
+@user_bp.route('/users', methods=['POST'])  
 def create_user():
     data = request.json
     user = User.from_dict(data)
@@ -16,7 +16,7 @@ def create_user():
     db.session.commit()
     return jsonify(user.to_dict()), 201
 
-@user_routes.route('/users/<int:user_id>', methods=['GET']) 
+@user_bp.route('/users/<int:user_id>', methods=['GET']) 
 def get_user(user_id):
     user = User.query.get(user_id)
     if user:
@@ -24,12 +24,12 @@ def get_user(user_id):
     else:
         return jsonify({'error': 'User not found'}), 404
 
-@user_routes.route('/users', methods=['GET'])
+@user_bp.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
     return jsonify([user.to_dict() for user in users]), 200
 
-@user_routes.route('/users/<int:user_id>', methods=['DELETE'])
+@user_bp.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     user = User.query.get(user_id)
     if user:

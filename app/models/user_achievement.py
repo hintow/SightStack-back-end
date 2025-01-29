@@ -8,13 +8,13 @@ if TYPE_CHECKING:
     from .user import User
     from .achievement import Achievement
 
-class UserAchievements(db.Model):
+class UserAchievement(db.Model):
     __tablename__ = 'user_achievements'
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), primary_key=True)
     achievement_id: Mapped[int] = mapped_column(ForeignKey('achievements.id'), primary_key=True)
 
-    user: Mapped['User'] = relationship('User', back_populates='achievements')
+    user: Mapped['User'] = relationship('User', back_populates='user_achievements')
     achievement: Mapped['Achievement'] = relationship('Achievement', back_populates='user_achievements')
 
     def to_dict(self):
@@ -25,6 +25,6 @@ class UserAchievements(db.Model):
 
     @classmethod
     def from_dict(cls, data):
-        return UserAchievements(user_id=data['user_id'], 
+        return UserAchievement(user_id=data['user_id'], 
                                 achievement_id=data['achievement_id']
         )

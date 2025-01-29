@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .user import User
-    from .user_achievements import UserAchievements
+    from .user_achievement import UserAchievement
 
 class Achievement(db.Model):
     __tablename__ = 'achievements'
@@ -14,13 +14,15 @@ class Achievement(db.Model):
     description: Mapped[str]
     unlocked: Mapped[bool] = mapped_column(default=False)
 
-    # user_achievements: Mapped[list['UserAchievements']] = relationship('UserAchievements', back_populates='achievement')
-    
     # Many-to-many relationship with User through UserAchievements
     users: Mapped[list['User']] = relationship(
         secondary='user_achievements',
         back_populates='achievements'
     )
+
+    # One-to-many relationship with UserAchievement
+    user_achievements: Mapped[list['UserAchievement']] = relationship('UserAchievement', back_populates='achievement')
+
 
     def to_dict(self):
         return {
