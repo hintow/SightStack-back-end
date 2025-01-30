@@ -13,7 +13,10 @@ class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str]
     password_hash: Mapped[str]
-    avatar: Mapped[str]=mapped_column(nullable=True)
+    avatar: Mapped[str]
+    age: Mapped[int]
+    email: Mapped[str] = mapped_column(unique=True)
+    score: Mapped[int] = mapped_column(default=0)
 
     # achievements: Mapped[list['UserAchievements']] = relationship(secondary='user_achievements', back_populates='user')
     # games: Mapped[list['Game']] = relationship('Game', back_populates='user')

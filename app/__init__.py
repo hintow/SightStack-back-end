@@ -10,11 +10,16 @@ from .models.game_word import GameWord
 from .models.achievement import Achievement
 from .routes.game_routes import game_bp
 from .routes.user_routes import user_bp
+from .routes.word_routes import word_routes
+
+from flask_cors import CORS
+
 
 load_dotenv() 
 
 def create_app(config=None):
     app = Flask(__name__)
+    CORS(app)
     
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost:5432/sightstack_dev'
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
@@ -28,6 +33,7 @@ def create_app(config=None):
 
     app.register_blueprint(game_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(word_routes)
     
     # app.register_blueprint(user_bp, url_prefix='/api')
     # app.register_blueprint(word_routes, url_prefix='/api')  
