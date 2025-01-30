@@ -11,7 +11,7 @@ word_routes = Blueprint('word_routes', __name__)
 NUM_WORDS_DAILY_CHALLENGE = 3
 NUM_WORDS_GET_WORDS = 5
 
-@word_routes.route('/daily_challenge', methods=['GET'])
+@word_routes.route('/dailygame', methods=['GET'])
 def daily_challenge():
     words = Word.query.all()
 
