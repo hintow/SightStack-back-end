@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
+from werkzeug.security import generate_password_hash, check_password_hash
 
 if TYPE_CHECKING:
     from .achievement import Achievement
@@ -34,7 +35,12 @@ class User(db.Model):
     # One-to-many relationship with Game
     games: Mapped[list['Game']] = relationship('Game', back_populates='user')
 
-
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+    
     def to_dict(self):
         return {
             'id': self.id,
