@@ -10,13 +10,13 @@ if TYPE_CHECKING:
 class User(db.Model):
     __tablename__ = 'users'
     
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    username: Mapped[str]
-    password_hash: Mapped[str]
-    avatar: Mapped[str]
-    age: Mapped[int]
-    email: Mapped[str] = mapped_column(unique=True)
-    score: Mapped[int] = mapped_column(default=0)
+    user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    child_name: Mapped[str] = mapped_column(db.String(100)) 
+    child_age: Mapped[int] = mapped_column(db.Integer)
+    email: Mapped[str] = mapped_column(db.String(100), unique=True)
+    password_hash: Mapped[str] = mapped_column(db.String(128))
+    avatar: Mapped[str] = mapped_column(db.String(200))
+    score: Mapped[int] = mapped_column(db.Integer, default=0) 
 
     # achievements: Mapped[list['UserAchievements']] = relationship(secondary='user_achievements', back_populates='user')
     # games: Mapped[list['Game']] = relationship('Game', back_populates='user')
@@ -38,14 +38,20 @@ class User(db.Model):
     def to_dict(self):
         return {
             'user_id': self.id,
-            'username': self.username,
-            'password_hash': self.password_hash,
-            'avatar': self.avatar
+            'child_name': self.child_name,
+            'child_age': self.child_age,
+            'email': self.email,
+            'avatar': self.avatar,
+            'score': self.score,
+            'achievements': [a.to_dict() for a in self.achievements]
         }
 
     @classmethod
     def from_dict(cls, data):
-        return User(username=data['username'], 
-                    password_hash=data['password_hash'], 
-                    avatar=data.get('avatar')
+        return User(
+            child_name=data['child_name'],
+            child_age=data['child_age'],
+            email=data['email'],
+            password_hash=data['password_hash'],  
+            avatar=data['avatar']
         )
