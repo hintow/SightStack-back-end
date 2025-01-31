@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class User(db.Model):
     __tablename__ = 'users'
     
-    user_id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     child_name: Mapped[str] = mapped_column(db.String(100)) 
     child_age: Mapped[int] = mapped_column(db.Integer)
     email: Mapped[str] = mapped_column(db.String(100), unique=True)
@@ -37,7 +37,7 @@ class User(db.Model):
 
     def to_dict(self):
         return {
-            'user_id': self.id,
+            'id': self.id,
             'child_name': self.child_name,
             'child_age': self.child_age,
             'email': self.email,
@@ -52,6 +52,6 @@ class User(db.Model):
             child_name=data['child_name'],
             child_age=data['child_age'],
             email=data['email'],
-            password_hash=data['password_hash'],  
+            password_hash=data['password'],  
             avatar=data['avatar']
         )

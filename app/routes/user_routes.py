@@ -16,7 +16,7 @@ def register():
         child_name=data['childName'],
         child_age=data['childAge'],
         email=data['email'],
-        password=data['password'],  # 在生产环境中，记得对密码进行哈希处理！
+        password_hash=data['password'],  # 在生产环境中，记得对密码进行哈希处理！
         avatar=data['avatar']
     )
     db.session.add(new_user)
@@ -26,7 +26,7 @@ def register():
 @user_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    user = User.query.filter_by(email=data['email'], password=data['password']).first()
+    user = User.query.filter_by(email=data['email'], password_hash=data['password']).first()
     if user:
         return jsonify({
             'userId': user.id,
