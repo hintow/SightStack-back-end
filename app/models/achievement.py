@@ -36,6 +36,6 @@ class Achievement(db.Model):
     def from_dict(cls, data):
         return Achievement(
             title=data['title'],
-            description=data['description']
+            description=data['description'],
             required_score=data['required_score']
         )
