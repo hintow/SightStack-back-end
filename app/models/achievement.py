@@ -12,7 +12,7 @@ class Achievement(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str]
     description: Mapped[str]
-    unlocked: Mapped[bool] = mapped_column(default=False)
+    required_score: Mapped[int]
 
     # Many-to-many relationship with User through UserAchievements
     users: Mapped[list['User']] = relationship(
@@ -28,12 +28,14 @@ class Achievement(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'description': self.description
+            'description': self.description,
+            'required_score': self.required_score
         }
 
     @classmethod
     def from_dict(cls, data):
         return Achievement(
             title=data['title'],
-            description=data['description']
+            description=data['description'],
+            required_score=data['required_score']
         )

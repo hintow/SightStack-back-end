@@ -13,7 +13,7 @@ def daily_challenge():
     words = Word.query.all()
 
     selected_word = random.sample(words, 1)[0]
-    
+
     return jsonify(selected_word.to_dict()), 200
 
 @word_routes.route('/words/level/<level>', methods=['GET'])

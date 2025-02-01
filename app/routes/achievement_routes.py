@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from ..models.user_achievements import UserAchievements
+from app.models.user_achievements import UserAchievements
 from ..db import db
 
 achievement_bp = Blueprint('user_achievements', __name__)
