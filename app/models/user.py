@@ -2,10 +2,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
     from .achievement import Achievement
-    from .user_achievement import UserAchievement
-    from .game import Game
+    from .user_achievement  import UserAchievement
+    from .user_word import UserWord
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -18,6 +19,9 @@ class User(db.Model):
     avatar: Mapped[str] = mapped_column(db.String(200))
     score: Mapped[int] = mapped_column(db.Integer, default=0) 
 
+
+    mastered_words: Mapped[list['UserWord']] = relationship('UserWord', backref='user', lazy=True)
+    
     # Many-to-many relationship with Achievement through UserAchievements
     achievements: Mapped[list['Achievement']] = relationship(
         secondary='user_achievements',
@@ -27,8 +31,8 @@ class User(db.Model):
     # One-to-many relationship with UserAchievement
     user_achievements: Mapped[list['UserAchievement']] = relationship('UserAchievement', back_populates='user')
 
-    # One-to-many relationship with Game
-    games: Mapped[list['Game']] = relationship('Game', back_populates='user')
+    # One-to-many relationship with UserWord
+    user_words: Mapped[list['UserWord']] = relationship('UserWord', back_populates='user')
 
     def to_dict(self):
         return {
