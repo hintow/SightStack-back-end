@@ -18,9 +18,6 @@ class User(db.Model):
     avatar: Mapped[str] = mapped_column(db.String(200))
     score: Mapped[int] = mapped_column(db.Integer, default=0) 
 
-    # achievements: Mapped[list['UserAchievements']] = relationship(secondary='user_achievements', back_populates='user')
-    # games: Mapped[list['Game']] = relationship('Game', back_populates='user')
-
     # Many-to-many relationship with Achievement through UserAchievements
     achievements: Mapped[list['Achievement']] = relationship(
         secondary='user_achievements',
@@ -30,10 +27,8 @@ class User(db.Model):
     # One-to-many relationship with UserAchievement
     user_achievements: Mapped[list['UserAchievement']] = relationship('UserAchievement', back_populates='user')
 
-
     # One-to-many relationship with Game
     games: Mapped[list['Game']] = relationship('Game', back_populates='user')
-
 
     def to_dict(self):
         return {

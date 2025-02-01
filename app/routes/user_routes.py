@@ -62,3 +62,18 @@ def delete_user(user_id):
         return jsonify({'error': 'User not found'}), 404
 
 
+@user_bp.route('/leaderboard', methods=['GET'])
+def leaderboard():
+    # 获取分数最高的前 10 名用户
+    top_users = User.query.order_by(User.score.desc()).limit(10).all()
+    
+    # 构造积分榜数据
+    leaderboard_data = [
+        {
+            'childName': user.child_name,
+            'score': user.score
+        }
+        for user in top_users
+    ]
+    
+    return jsonify(leaderboard_data), 200
