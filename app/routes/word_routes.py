@@ -20,6 +20,6 @@ def daily_challenge():
 def get_words(level):
     words = Word.query.where(Word.level == level).all()
 
-    words_list = [word.to_dict() for word in words]
+    selected_word = random.sample(words, 1)[0]
     
-    return jsonify(words_list), 200
+    return jsonify(selected_word.to_dict()), 200
