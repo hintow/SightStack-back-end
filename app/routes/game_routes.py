@@ -11,7 +11,15 @@ from ..models.achievement import Achievement
 game_bp = Blueprint('game', __name__)
 
 @game_bp.route('/update', methods=['POST'])
-def update_score():
+def update_score(): 
+    if request.method == 'OPTIONS':
+        # 返回允许的 CORS 头部
+        response = jsonify()
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+        response.headers.add('Access-Control-Allow-Methods', 'POST')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        return response
+          
     data = request.get_json()
     user = User.query.get(data['userId'])
     user.score += data['score']
