@@ -93,3 +93,13 @@ def leaderboard():
     ]
     
     return jsonify(leaderboard_data), 200
+
+@user_bp.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_users():
+    user_id = request.args.get('userId')
+    user = User.query.get(user_id)
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'message': 'User deleted'}), 200
+    return jsonify({'error': 'User not found'}), 404
