@@ -3,12 +3,10 @@ from flask import Flask
 from .db import db, migrate
 from dotenv import load_dotenv
 from .models.user import User
-from .models.game import Game
 from .models.word import Word
 from .models.user_achievement import UserAchievement
-from .models.game_word import GameWord
 from .models.achievement import Achievement
-from .routes.game_routes import game_bp
+# from .routes.game_routes import game_bp
 from .routes.user_routes import user_bp
 from .routes.word_routes import word_routes
 
