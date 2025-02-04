@@ -4,7 +4,6 @@ from ..db import db
 
 user_bp = Blueprint('user_bp', __name__)
 
-
 @user_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -67,6 +66,27 @@ def user_info():
         }), 200
     return jsonify({'error': 'User not found'}), 404
 
+@user_bp.route('/update', methods=['POST'])
+def update_score():
+    data = request.get_json()
+
+    # Validate request data
+    if 'userId' not in data or 'score' not in data:
+        return jsonify({'error': 'Missing userId or score'}), 400
+
+    user = User.query.get(data['userId'])
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    try:
+        # Update user score
+        user.score += data['score']
+        db.session.commit()
+        return jsonify({'message': 'Score updated successfully', 'newScore': user.score}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
 @user_bp.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     user = User.query.get(user_id)
@@ -80,10 +100,10 @@ def delete_user(user_id):
 
 @user_bp.route('/leaderboard', methods=['GET'])
 def leaderboard():
-    # 获取分数最高的前 10 名用户
+    
     top_users = User.query.order_by(User.score.desc()).limit(10).all()
     
-    # 构造积分榜数据
+
     leaderboard_data = [
         {
             'childName': user.child_name,

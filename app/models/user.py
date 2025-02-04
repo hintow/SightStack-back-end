@@ -24,7 +24,8 @@ class User(db.Model):
     child_name: Mapped[str] = mapped_column(db.String(100)) 
     child_age: Mapped[int] = mapped_column(db.Integer)
     email: Mapped[str] = mapped_column(db.String(100), unique=True)
-    password_hash: Mapped[str] = mapped_column(db.String(128))
+    # password_hash: Mapped[str] = mapped_column(db.String(128))
+    password_hash: Mapped[str] = mapped_column(db.Text)
     avatar: Mapped[str] = mapped_column(db.String(200))
     score: Mapped[int] = mapped_column(db.Integer, default=0) 
 
