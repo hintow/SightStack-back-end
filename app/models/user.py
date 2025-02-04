@@ -29,7 +29,7 @@ class User(db.Model):
     score: Mapped[int] = mapped_column(db.Integer, default=0) 
 
 
-    mastered_words: Mapped[list['UserWord']] = relationship('UserWord', backref='user', lazy=True)
+    # mastered_words: Mapped[list['UserWord']] = relationship('UserWord', backref='user', lazy=True)
     
     # Many-to-many relationship with Achievement through UserAchievements
     achievements: Mapped[list['Achievement']] = relationship(
@@ -45,7 +45,7 @@ class User(db.Model):
     )
 
     # One-to-many relationship with UserWord
-    user_words: Mapped[list['UserWord']] = relationship('UserWord', back_populates='user')
+    # user_words: Mapped[list['UserWord']] = relationship('UserWord', back_populates='user')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

@@ -1,10 +1,6 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
-from .game import Game
-
-if TYPE_CHECKING:
-    from .game_word import GameWord
 
 
 class Word(db.Model):
@@ -15,11 +11,7 @@ class Word(db.Model):
     hint: Mapped[str] 
     level: Mapped[str]
 
-    # One-to-many relationship with GameWord
-    game_words: Mapped[list['GameWord']] = relationship('GameWord', back_populates='word')
-
-    # Many-to-many relationship with Game through GameWord
-    games: Mapped[list['Game']] = relationship(secondary='games_words', back_populates='words')
+   
 
     def to_dict(self):
         return {
