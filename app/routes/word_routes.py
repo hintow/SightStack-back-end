@@ -8,6 +8,16 @@ from sqlalchemy import func
 
 word_routes = Blueprint('word_routes', __name__)
 
+@word_routes.before_request
+def handle_preflight():
+    if request.method == "OPTIONS":
+        response = jsonify()
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Methods', '*')
+        response.headers.add('Access-Control-Allow-Headers', '*')
+        return response
+
+
 # Cache per level
 level_caches = {}
 COOLDOWN_MINUTES = 30
@@ -76,15 +86,5 @@ def get_words(level):
 
     if error:
         return jsonify({'error': error}), 404
-        # Get statistics for error reporting
-        # total = Word.query.filter(Word.level == level).count()
-        # used = len(level_caches.get(level, {}))
-        
-        # return jsonify({
-        #     'error': error,
-        #     'total_words': total,
-        #     'used_words': used,
-        #     'available_words': total - used
-        # }), 404
-        
+
     return jsonify(word.to_dict()), 200
