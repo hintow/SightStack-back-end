@@ -3,12 +3,10 @@ from flask import Flask
 from .db import db, migrate
 from dotenv import load_dotenv
 from .models.user import User
-from .models.game import Game
 from .models.word import Word
 from .models.user_achievement import UserAchievement
-from .models.game_word import GameWord
 from .models.achievement import Achievement
-from .routes.game_routes import game_bp
+# from .routes.game_routes import game_bp
 from .routes.user_routes import user_bp
 from .routes.word_routes import word_routes
 
@@ -19,7 +17,16 @@ load_dotenv()
 
 def create_app(config=None):
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, resources={
+        r"/*": {
+            "origins": [
+                "http://localhost:5173",  # Local frontend
+                "https://sightstack-front-end.onrender.com",  # Deployed frontend
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
     
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost:5432/sightstack_dev'
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
@@ -31,7 +38,7 @@ def create_app(config=None):
     db.init_app(app)    
     migrate.init_app(app, db)
 
-    app.register_blueprint(game_bp)
+
     app.register_blueprint(user_bp)
     app.register_blueprint(word_routes)
     
