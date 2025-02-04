@@ -19,7 +19,16 @@ load_dotenv()
 
 def create_app(config=None):
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, resources={
+        r"/*": {
+            "origins": [
+                "http://localhost:5173",  # Local frontend
+                "https://sightstack-front-end.onrender.com",  # Deployed frontend
+            ],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
     
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:postgres@localhost:5432/sightstack_dev'
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")

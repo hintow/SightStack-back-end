@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db import db
 from typing import TYPE_CHECKING
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 if TYPE_CHECKING:
@@ -9,6 +10,14 @@ if TYPE_CHECKING:
     from .user_word import UserWord
 
 class User(db.Model):
+    """User model representing a child user in the application.
+    
+    Relationships:
+        - achievements: Many-to-many with Achievement through UserAchievements
+        - user_achievements: One-to-many with UserAchievement
+        - user_words: One-to-many with UserWord
+        - mastered_words: One-to-many with UserWord (backref)
+    """
     __tablename__ = 'users'
     
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
@@ -29,11 +38,21 @@ class User(db.Model):
     )
 
     # One-to-many relationship with UserAchievement
-    user_achievements: Mapped[list['UserAchievement']] = relationship('UserAchievement', back_populates='user')
+    user_achievements: Mapped[list['UserAchievement']] = relationship(
+        'UserAchievement', 
+        back_populates='user', 
+        overlaps="achievements"
+    )
 
     # One-to-many relationship with UserWord
     user_words: Mapped[list['UserWord']] = relationship('UserWord', back_populates='user')
 
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+    
     def to_dict(self):
         return {
             'id': self.id,
@@ -47,10 +66,13 @@ class User(db.Model):
 
     @classmethod
     def from_dict(cls, data):
-        return User(
+        user = cls(
             child_name=data['child_name'],
             child_age=data['child_age'],
             email=data['email'],
-            password_hash=data['password'],  
             avatar=data['avatar']
         )
+        user.set_password(data['password'])
+        return user
+    
+    
