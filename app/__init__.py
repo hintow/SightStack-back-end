@@ -9,6 +9,7 @@ from .models.achievement import Achievement
 # from .routes.game_routes import game_bp
 from .routes.user_routes import user_bp
 from .routes.word_routes import word_routes
+from .routes.achievement_routes import achievement_bp
 
 from flask_cors import CORS
 
@@ -41,6 +42,7 @@ def create_app(config=None):
 
     app.register_blueprint(user_bp)
     app.register_blueprint(word_routes)
+    app.register_blueprint(achievement_bp)
     
     # app.register_blueprint(user_bp, url_prefix='/api')
     # app.register_blueprint(word_routes, url_prefix='/api')  
