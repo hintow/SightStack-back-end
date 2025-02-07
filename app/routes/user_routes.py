@@ -107,7 +107,8 @@ def leaderboard():
     leaderboard_data = [
         {
             'childName': user.child_name,
-            'score': user.score
+            'score': user.score,
+            'avatar': user.avatar
         }
         for user in top_users
     ]
