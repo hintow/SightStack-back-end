@@ -78,16 +78,6 @@ def user_info():
         'score': user.score,
         'achievements': unlocked_achievements
     }), 200
-    # user = User.query.get(user_id)
-    # if user:
-    #     return jsonify({
-    #         'childName': user.child_name,
-    #         'childAge': user.child_age,
-    #         'avatar': user.avatar,
-    #         'score': user.score,
-    #         'achievements': [a.title for a in user.achievements]
-    #     }), 200
-    # return jsonify({'error': 'User not found'}), 404
 
 @user_bp.route('/update', methods=['POST'])
 def update_score():
@@ -106,15 +96,22 @@ def update_score():
         user.score += data['score']
         db.session.commit()
 
-        response = check_achievements(user.id)
-        achievements_data = response.get_json()
+        achievement_response, status_code = check_achievements(user.id)
+        if status_code == 200:
+            achievements_data = achievement_response.json
 
-
-        return jsonify({
-            'message': 'Score updated successfully', 
-            'newScore': user.score,
-            'newAchievements': achievements_data.get('newly_unlocked',[])
+            return jsonify({
+                'message': 'Score updated successfully', 
+                'newScore': user.score,
+                'newAchievements': achievements_data.get('newly_unlocked',[])
+                }), 200
+        else:
+            return jsonify({
+                'message': 'Score updated but failed to check achievements',
+                'newScore': user.score
             }), 200
+
+        
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
@@ -134,8 +131,6 @@ def delete_user(user_id):
 def leaderboard():
     
     top_users = User.query.order_by(User.score.desc()).limit(10).all()
-    
-
     leaderboard_data = [
         {
             'childName': user.child_name,
