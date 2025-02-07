@@ -1,6 +1,9 @@
 from flask import Blueprint, request, jsonify
 from ..models.user import User
+from ..models.achievement import Achievement 
+from .achievement_routes import check_achievements 
 from ..db import db
+
 
 user_bp = Blueprint('user_bp', __name__)
 
@@ -55,16 +58,36 @@ def login():
 @user_bp.route('/userInfo', methods=['GET'])
 def user_info():
     user_id = request.args.get('userId')
+    if not user_id:
+        return jsonify({'error': 'User ID is required'}), 400
+
     user = User.query.get(user_id)
-    if user:
-        return jsonify({
-            'childName': user.child_name,
-            'childAge': user.child_age,
-            'avatar': user.avatar,
-            'score': user.score,
-            'achievements': [a.title for a in user.achievements]
-        }), 200
-    return jsonify({'error': 'User not found'}), 404
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
+
+    # Get user's unlocked achievements
+    unlocked_achievements = [
+        achievement.to_dict() 
+        for achievement in user.achievements
+    ]
+
+    return jsonify({
+        'childName': user.child_name,
+        'childAge': user.child_age,
+        'avatar': user.avatar,
+        'score': user.score,
+        'achievements': unlocked_achievements
+    }), 200
+    # user = User.query.get(user_id)
+    # if user:
+    #     return jsonify({
+    #         'childName': user.child_name,
+    #         'childAge': user.child_age,
+    #         'avatar': user.avatar,
+    #         'score': user.score,
+    #         'achievements': [a.title for a in user.achievements]
+    #     }), 200
+    # return jsonify({'error': 'User not found'}), 404
 
 @user_bp.route('/update', methods=['POST'])
 def update_score():
@@ -82,7 +105,16 @@ def update_score():
         # Update user score
         user.score += data['score']
         db.session.commit()
-        return jsonify({'message': 'Score updated successfully', 'newScore': user.score}), 200
+
+        response = check_achievements(user.id)
+        achievements_data = response.get_json()
+
+
+        return jsonify({
+            'message': 'Score updated successfully', 
+            'newScore': user.score,
+            'newAchievements': achievements_data.get('newly_unlocked',[])
+            }), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
